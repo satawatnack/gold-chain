@@ -7,29 +7,33 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+
 	"github.com/satawatnack/goldchain/x/goldchain/types"
-	// this line is used by starport scaffolding # ibc/keeper/import
 )
 
 type (
 	Keeper struct {
-		cdc      codec.Marshaler
-		storeKey sdk.StoreKey
-		memKey   sdk.StoreKey
+		CoinKeeper bankkeeper.Keeper
+		cdc        codec.Marshaler
+		storeKey   sdk.StoreKey
+		memKey     sdk.StoreKey
 		// this line is used by starport scaffolding # ibc/keeper/attribute
 	}
 )
 
 func NewKeeper(
+	coinKeeper bankkeeper.Keeper,
 	cdc codec.Marshaler,
 	storeKey,
 	memKey sdk.StoreKey,
 	// this line is used by starport scaffolding # ibc/keeper/parameter
 ) *Keeper {
 	return &Keeper{
-		cdc:      cdc,
-		storeKey: storeKey,
-		memKey:   memKey,
+		CoinKeeper: coinKeeper,
+		cdc:        cdc,
+		storeKey:   storeKey,
+		memKey:     memKey,
 		// this line is used by starport scaffolding # ibc/keeper/return
 	}
 }

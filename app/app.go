@@ -84,6 +84,7 @@ import (
 	"github.com/satawatnack/goldchain/docs"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	"github.com/satawatnack/goldchain/x/goldchain"
 	goldchainkeeper "github.com/satawatnack/goldchain/x/goldchain/keeper"
@@ -146,6 +147,8 @@ var (
 		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 		govtypes.ModuleName:            {authtypes.Burner},
 		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+
+		goldchaintypes.ModuleName: nil,
 	}
 )
 
@@ -326,6 +329,7 @@ func New(
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 
 	app.GoldchainKeeper = *goldchainkeeper.NewKeeper(
+		app.BankKeeper,
 		appCodec,
 		keys[goldchaintypes.StoreKey],
 		keys[goldchaintypes.MemStoreKey],

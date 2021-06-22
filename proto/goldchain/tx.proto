@@ -8,6 +8,21 @@ option go_package = "github.com/satawatnack/goldchain/x/goldchain/types";
 // Msg defines the Msg service.
 service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
+    rpc BuyGold(MsgBuyGold) returns (MsgBuyGoldResponse);
+    rpc SellGold(MsgSellGold) returns (MsgSellGoldResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgBuyGold {
+    int64 n = 1;
+    string buyer = 2;
+}
+  
+message MsgBuyGoldResponse { }
+
+message MsgSellGold {
+    int64 n = 1;
+    string seller = 2;
+}
+
+message MsgSellGoldResponse { }

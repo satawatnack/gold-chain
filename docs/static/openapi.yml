@@ -29488,3 +29488,7 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  satawatnack.goldchain.goldchain.MsgBuyGoldResponse:
+    type: object
+  satawatnack.goldchain.goldchain.MsgSellGoldResponse:
+    type: object
