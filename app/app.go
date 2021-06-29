@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec/types"
@@ -186,6 +187,7 @@ type App struct {
 	// keepers
 	AccountKeeper    authkeeper.AccountKeeper
 	BankKeeper       bankkeeper.Keeper
+	BankKeeperView   bankkeeper.ViewKeeper
 	CapabilityKeeper *capabilitykeeper.Keeper
 	StakingKeeper    stakingkeeper.Keeper
 	SlashingKeeper   slashingkeeper.Keeper
@@ -202,8 +204,6 @@ type App struct {
 	// make scoped keepers public for test purposes
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
-
-	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
 
 	GoldchainKeeper goldchainkeeper.Keeper
 
@@ -262,7 +262,7 @@ func New(
 	// grant capabilities for the ibc and ibc-transfer modules
 	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
 	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
-	// this line is used by starport scaffolding # stargate/app/scopedKeeper
+	scopedConsumingKeeper := app.CapabilityKeeper.ScopeToModule(goldchaintypes.ModuleName)
 
 	// add keepers
 	app.AccountKeeper = authkeeper.NewAccountKeeper(
@@ -326,13 +326,15 @@ func New(
 	// If evidence needs to be handled for the app, set routes in router here and seal
 	app.EvidenceKeeper = *evidenceKeeper
 
-	// this line is used by starport scaffolding # stargate/app/keeperDefinition
-
 	app.GoldchainKeeper = *goldchainkeeper.NewKeeper(
 		app.BankKeeper,
+		app.BankKeeperView,
 		appCodec,
 		keys[goldchaintypes.StoreKey],
 		keys[goldchaintypes.MemStoreKey],
+		app.IBCKeeper.ChannelKeeper,
+		&app.IBCKeeper.PortKeeper,
+		scopedConsumingKeeper,
 	)
 	goldchainModule := goldchain.NewAppModule(appCodec, app.GoldchainKeeper)
 
@@ -344,7 +346,7 @@ func New(
 	// Create static IBC router, add transfer route, then set and seal it
 	ibcRouter := porttypes.NewRouter()
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
-	// this line is used by starport scaffolding # ibc/app/router
+	ibcRouter.AddRoute(goldchaintypes.ModuleName, goldchainModule)
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	/****  Module Options ****/
@@ -462,6 +464,28 @@ func (app *App) Name() string { return app.BaseApp.Name() }
 
 // BeginBlocker application updates every begin block
 func (app *App) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
+	var tm time.Time
+	encode_time := app.GoldchainKeeper.GetLatestTimeRequest(ctx)
+	if err := tm.UnmarshalBinary(encode_time); err != nil {
+		panic(err)
+	}
+
+	// if math.Mod(float64(ctx.BlockHeader().Height), 100) == 0 {
+	// 	err := app.GoldchainKeeper.RequestGoldPrice(ctx)
+	// 	if err != nil {
+	// 		fmt.Println("\n lastest gold price \n", err)
+	// 	}
+	// }
+
+	// encode_price, err := app.GoldchainKeeper.GetResult(ctx, bandoracle.RequestID(app.GoldchainKeeper.GetLatestRequestID(ctx)))
+	// if err != nil {
+	// 	fmt.Println("\n lastest gold price \n", err.Error())
+	// }
+
+	// fmt.Println("\n\n\n\n\n\n\n\n\n\n block time set \n\n\n\n\n\n\n\n\n\n", tm)
+	// fmt.Println("\n\n\n\n\n\n\n\n\n\n block time \n\n\n\n\n\n\n\n\n\n", ctx.BlockHeader().Time.UTC())
+	// fmt.Println("\n lastest gold price \n", encode_price)
+	// fmt.Println("\n lastest requestID \n", app.GoldchainKeeper.GetLatestRequestID(ctx))
 	return app.mm.BeginBlock(ctx, req)
 }
 
@@ -476,6 +500,7 @@ func (app *App) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.Res
 	if err := tmjson.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
 		panic(err)
 	}
+
 	return app.mm.InitGenesis(ctx, app.appCodec, genesisState)
 }
 

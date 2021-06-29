@@ -1,284 +1,619 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal'
-import * as Long from 'long'
+import { Reader, util, configure, Writer } from "protobufjs/minimal";
+import * as Long from "long";
+import { Coin } from "../cosmos/base/v1beta1/coin";
 
-export const protobufPackage = 'satawatnack.goldchain.goldchain'
+export const protobufPackage = "satawatnack.goldchain.goldchain";
 
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgBuyGold {
-  n: number
-  buyer: string
+  n: number;
+  buyer: string;
 }
 
 export interface MsgBuyGoldResponse {}
 
 export interface MsgSellGold {
-  n: number
-  seller: string
+  n: number;
+  seller: string;
 }
 
 export interface MsgSellGoldResponse {}
 
-const baseMsgBuyGold: object = { n: 0, buyer: '' }
+/** MsgRequestData defines a SDK message for requesting data from BandChain. */
+export interface MsgRequestData {
+  oracleScriptId: number;
+  sourceChannel: string;
+  calldata: Uint8Array;
+  askCount: number;
+  minCount: number;
+  feeLimit: Coin[];
+  requestKey: string;
+  /** PrepareGas is amount of gas to pay to prepare raw requests */
+  prepareGas: number;
+  /** ExecuteGas is amount of gas to reserve for executing */
+  executeGas: number;
+  sender: string;
+}
+
+/** MsgRequestDataResponse defines the Msg/RequestData response type. */
+export interface MsgRequestDataResponse {}
+
+const baseMsgBuyGold: object = { n: 0, buyer: "" };
 
 export const MsgBuyGold = {
   encode(message: MsgBuyGold, writer: Writer = Writer.create()): Writer {
     if (message.n !== 0) {
-      writer.uint32(8).int64(message.n)
+      writer.uint32(8).int64(message.n);
     }
-    if (message.buyer !== '') {
-      writer.uint32(18).string(message.buyer)
+    if (message.buyer !== "") {
+      writer.uint32(18).string(message.buyer);
     }
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): MsgBuyGold {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgBuyGold } as MsgBuyGold
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgBuyGold } as MsgBuyGold;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.n = longToNumber(reader.int64() as Long)
-          break
+          message.n = longToNumber(reader.int64() as Long);
+          break;
         case 2:
-          message.buyer = reader.string()
-          break
+          message.buyer = reader.string();
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): MsgBuyGold {
-    const message = { ...baseMsgBuyGold } as MsgBuyGold
+    const message = { ...baseMsgBuyGold } as MsgBuyGold;
     if (object.n !== undefined && object.n !== null) {
-      message.n = Number(object.n)
+      message.n = Number(object.n);
     } else {
-      message.n = 0
+      message.n = 0;
     }
     if (object.buyer !== undefined && object.buyer !== null) {
-      message.buyer = String(object.buyer)
+      message.buyer = String(object.buyer);
     } else {
-      message.buyer = ''
+      message.buyer = "";
     }
-    return message
+    return message;
   },
 
   toJSON(message: MsgBuyGold): unknown {
-    const obj: any = {}
-    message.n !== undefined && (obj.n = message.n)
-    message.buyer !== undefined && (obj.buyer = message.buyer)
-    return obj
+    const obj: any = {};
+    message.n !== undefined && (obj.n = message.n);
+    message.buyer !== undefined && (obj.buyer = message.buyer);
+    return obj;
   },
 
   fromPartial(object: DeepPartial<MsgBuyGold>): MsgBuyGold {
-    const message = { ...baseMsgBuyGold } as MsgBuyGold
+    const message = { ...baseMsgBuyGold } as MsgBuyGold;
     if (object.n !== undefined && object.n !== null) {
-      message.n = object.n
+      message.n = object.n;
     } else {
-      message.n = 0
+      message.n = 0;
     }
     if (object.buyer !== undefined && object.buyer !== null) {
-      message.buyer = object.buyer
+      message.buyer = object.buyer;
     } else {
-      message.buyer = ''
+      message.buyer = "";
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseMsgBuyGoldResponse: object = {}
+const baseMsgBuyGoldResponse: object = {};
 
 export const MsgBuyGoldResponse = {
   encode(_: MsgBuyGoldResponse, writer: Writer = Writer.create()): Writer {
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): MsgBuyGoldResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgBuyGoldResponse } as MsgBuyGoldResponse
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgBuyGoldResponse } as MsgBuyGoldResponse;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(_: any): MsgBuyGoldResponse {
-    const message = { ...baseMsgBuyGoldResponse } as MsgBuyGoldResponse
-    return message
+    const message = { ...baseMsgBuyGoldResponse } as MsgBuyGoldResponse;
+    return message;
   },
 
   toJSON(_: MsgBuyGoldResponse): unknown {
-    const obj: any = {}
-    return obj
+    const obj: any = {};
+    return obj;
   },
 
   fromPartial(_: DeepPartial<MsgBuyGoldResponse>): MsgBuyGoldResponse {
-    const message = { ...baseMsgBuyGoldResponse } as MsgBuyGoldResponse
-    return message
-  }
-}
+    const message = { ...baseMsgBuyGoldResponse } as MsgBuyGoldResponse;
+    return message;
+  },
+};
 
-const baseMsgSellGold: object = { n: 0, seller: '' }
+const baseMsgSellGold: object = { n: 0, seller: "" };
 
 export const MsgSellGold = {
   encode(message: MsgSellGold, writer: Writer = Writer.create()): Writer {
     if (message.n !== 0) {
-      writer.uint32(8).int64(message.n)
+      writer.uint32(8).int64(message.n);
     }
-    if (message.seller !== '') {
-      writer.uint32(18).string(message.seller)
+    if (message.seller !== "") {
+      writer.uint32(18).string(message.seller);
     }
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): MsgSellGold {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgSellGold } as MsgSellGold
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSellGold } as MsgSellGold;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.n = longToNumber(reader.int64() as Long)
-          break
+          message.n = longToNumber(reader.int64() as Long);
+          break;
         case 2:
-          message.seller = reader.string()
-          break
+          message.seller = reader.string();
+          break;
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(object: any): MsgSellGold {
-    const message = { ...baseMsgSellGold } as MsgSellGold
+    const message = { ...baseMsgSellGold } as MsgSellGold;
     if (object.n !== undefined && object.n !== null) {
-      message.n = Number(object.n)
+      message.n = Number(object.n);
     } else {
-      message.n = 0
+      message.n = 0;
     }
     if (object.seller !== undefined && object.seller !== null) {
-      message.seller = String(object.seller)
+      message.seller = String(object.seller);
     } else {
-      message.seller = ''
+      message.seller = "";
     }
-    return message
+    return message;
   },
 
   toJSON(message: MsgSellGold): unknown {
-    const obj: any = {}
-    message.n !== undefined && (obj.n = message.n)
-    message.seller !== undefined && (obj.seller = message.seller)
-    return obj
+    const obj: any = {};
+    message.n !== undefined && (obj.n = message.n);
+    message.seller !== undefined && (obj.seller = message.seller);
+    return obj;
   },
 
   fromPartial(object: DeepPartial<MsgSellGold>): MsgSellGold {
-    const message = { ...baseMsgSellGold } as MsgSellGold
+    const message = { ...baseMsgSellGold } as MsgSellGold;
     if (object.n !== undefined && object.n !== null) {
-      message.n = object.n
+      message.n = object.n;
     } else {
-      message.n = 0
+      message.n = 0;
     }
     if (object.seller !== undefined && object.seller !== null) {
-      message.seller = object.seller
+      message.seller = object.seller;
     } else {
-      message.seller = ''
+      message.seller = "";
     }
-    return message
-  }
-}
+    return message;
+  },
+};
 
-const baseMsgSellGoldResponse: object = {}
+const baseMsgSellGoldResponse: object = {};
 
 export const MsgSellGoldResponse = {
   encode(_: MsgSellGoldResponse, writer: Writer = Writer.create()): Writer {
-    return writer
+    return writer;
   },
 
   decode(input: Reader | Uint8Array, length?: number): MsgSellGoldResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgSellGoldResponse } as MsgSellGoldResponse
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgSellGoldResponse } as MsgSellGoldResponse;
     while (reader.pos < end) {
-      const tag = reader.uint32()
+      const tag = reader.uint32();
       switch (tag >>> 3) {
         default:
-          reader.skipType(tag & 7)
-          break
+          reader.skipType(tag & 7);
+          break;
       }
     }
-    return message
+    return message;
   },
 
   fromJSON(_: any): MsgSellGoldResponse {
-    const message = { ...baseMsgSellGoldResponse } as MsgSellGoldResponse
-    return message
+    const message = { ...baseMsgSellGoldResponse } as MsgSellGoldResponse;
+    return message;
   },
 
   toJSON(_: MsgSellGoldResponse): unknown {
-    const obj: any = {}
-    return obj
+    const obj: any = {};
+    return obj;
   },
 
   fromPartial(_: DeepPartial<MsgSellGoldResponse>): MsgSellGoldResponse {
-    const message = { ...baseMsgSellGoldResponse } as MsgSellGoldResponse
-    return message
-  }
-}
+    const message = { ...baseMsgSellGoldResponse } as MsgSellGoldResponse;
+    return message;
+  },
+};
+
+const baseMsgRequestData: object = {
+  oracleScriptId: 0,
+  sourceChannel: "",
+  askCount: 0,
+  minCount: 0,
+  requestKey: "",
+  prepareGas: 0,
+  executeGas: 0,
+  sender: "",
+};
+
+export const MsgRequestData = {
+  encode(message: MsgRequestData, writer: Writer = Writer.create()): Writer {
+    if (message.oracleScriptId !== 0) {
+      writer.uint32(8).int64(message.oracleScriptId);
+    }
+    if (message.sourceChannel !== "") {
+      writer.uint32(18).string(message.sourceChannel);
+    }
+    if (message.calldata.length !== 0) {
+      writer.uint32(26).bytes(message.calldata);
+    }
+    if (message.askCount !== 0) {
+      writer.uint32(32).uint64(message.askCount);
+    }
+    if (message.minCount !== 0) {
+      writer.uint32(40).uint64(message.minCount);
+    }
+    for (const v of message.feeLimit) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
+    if (message.requestKey !== "") {
+      writer.uint32(58).string(message.requestKey);
+    }
+    if (message.prepareGas !== 0) {
+      writer.uint32(64).uint64(message.prepareGas);
+    }
+    if (message.executeGas !== 0) {
+      writer.uint32(72).uint64(message.executeGas);
+    }
+    if (message.sender !== "") {
+      writer.uint32(82).string(message.sender);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgRequestData {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgRequestData } as MsgRequestData;
+    message.feeLimit = [];
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.oracleScriptId = longToNumber(reader.int64() as Long);
+          break;
+        case 2:
+          message.sourceChannel = reader.string();
+          break;
+        case 3:
+          message.calldata = reader.bytes();
+          break;
+        case 4:
+          message.askCount = longToNumber(reader.uint64() as Long);
+          break;
+        case 5:
+          message.minCount = longToNumber(reader.uint64() as Long);
+          break;
+        case 6:
+          message.feeLimit.push(Coin.decode(reader, reader.uint32()));
+          break;
+        case 7:
+          message.requestKey = reader.string();
+          break;
+        case 8:
+          message.prepareGas = longToNumber(reader.uint64() as Long);
+          break;
+        case 9:
+          message.executeGas = longToNumber(reader.uint64() as Long);
+          break;
+        case 10:
+          message.sender = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgRequestData {
+    const message = { ...baseMsgRequestData } as MsgRequestData;
+    message.feeLimit = [];
+    if (object.oracleScriptId !== undefined && object.oracleScriptId !== null) {
+      message.oracleScriptId = Number(object.oracleScriptId);
+    } else {
+      message.oracleScriptId = 0;
+    }
+    if (object.sourceChannel !== undefined && object.sourceChannel !== null) {
+      message.sourceChannel = String(object.sourceChannel);
+    } else {
+      message.sourceChannel = "";
+    }
+    if (object.calldata !== undefined && object.calldata !== null) {
+      message.calldata = bytesFromBase64(object.calldata);
+    }
+    if (object.askCount !== undefined && object.askCount !== null) {
+      message.askCount = Number(object.askCount);
+    } else {
+      message.askCount = 0;
+    }
+    if (object.minCount !== undefined && object.minCount !== null) {
+      message.minCount = Number(object.minCount);
+    } else {
+      message.minCount = 0;
+    }
+    if (object.feeLimit !== undefined && object.feeLimit !== null) {
+      for (const e of object.feeLimit) {
+        message.feeLimit.push(Coin.fromJSON(e));
+      }
+    }
+    if (object.requestKey !== undefined && object.requestKey !== null) {
+      message.requestKey = String(object.requestKey);
+    } else {
+      message.requestKey = "";
+    }
+    if (object.prepareGas !== undefined && object.prepareGas !== null) {
+      message.prepareGas = Number(object.prepareGas);
+    } else {
+      message.prepareGas = 0;
+    }
+    if (object.executeGas !== undefined && object.executeGas !== null) {
+      message.executeGas = Number(object.executeGas);
+    } else {
+      message.executeGas = 0;
+    }
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = String(object.sender);
+    } else {
+      message.sender = "";
+    }
+    return message;
+  },
+
+  toJSON(message: MsgRequestData): unknown {
+    const obj: any = {};
+    message.oracleScriptId !== undefined &&
+      (obj.oracleScriptId = message.oracleScriptId);
+    message.sourceChannel !== undefined &&
+      (obj.sourceChannel = message.sourceChannel);
+    message.calldata !== undefined &&
+      (obj.calldata = base64FromBytes(
+        message.calldata !== undefined ? message.calldata : new Uint8Array()
+      ));
+    message.askCount !== undefined && (obj.askCount = message.askCount);
+    message.minCount !== undefined && (obj.minCount = message.minCount);
+    if (message.feeLimit) {
+      obj.feeLimit = message.feeLimit.map((e) =>
+        e ? Coin.toJSON(e) : undefined
+      );
+    } else {
+      obj.feeLimit = [];
+    }
+    message.requestKey !== undefined && (obj.requestKey = message.requestKey);
+    message.prepareGas !== undefined && (obj.prepareGas = message.prepareGas);
+    message.executeGas !== undefined && (obj.executeGas = message.executeGas);
+    message.sender !== undefined && (obj.sender = message.sender);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgRequestData>): MsgRequestData {
+    const message = { ...baseMsgRequestData } as MsgRequestData;
+    message.feeLimit = [];
+    if (object.oracleScriptId !== undefined && object.oracleScriptId !== null) {
+      message.oracleScriptId = object.oracleScriptId;
+    } else {
+      message.oracleScriptId = 0;
+    }
+    if (object.sourceChannel !== undefined && object.sourceChannel !== null) {
+      message.sourceChannel = object.sourceChannel;
+    } else {
+      message.sourceChannel = "";
+    }
+    if (object.calldata !== undefined && object.calldata !== null) {
+      message.calldata = object.calldata;
+    } else {
+      message.calldata = new Uint8Array();
+    }
+    if (object.askCount !== undefined && object.askCount !== null) {
+      message.askCount = object.askCount;
+    } else {
+      message.askCount = 0;
+    }
+    if (object.minCount !== undefined && object.minCount !== null) {
+      message.minCount = object.minCount;
+    } else {
+      message.minCount = 0;
+    }
+    if (object.feeLimit !== undefined && object.feeLimit !== null) {
+      for (const e of object.feeLimit) {
+        message.feeLimit.push(Coin.fromPartial(e));
+      }
+    }
+    if (object.requestKey !== undefined && object.requestKey !== null) {
+      message.requestKey = object.requestKey;
+    } else {
+      message.requestKey = "";
+    }
+    if (object.prepareGas !== undefined && object.prepareGas !== null) {
+      message.prepareGas = object.prepareGas;
+    } else {
+      message.prepareGas = 0;
+    }
+    if (object.executeGas !== undefined && object.executeGas !== null) {
+      message.executeGas = object.executeGas;
+    } else {
+      message.executeGas = 0;
+    }
+    if (object.sender !== undefined && object.sender !== null) {
+      message.sender = object.sender;
+    } else {
+      message.sender = "";
+    }
+    return message;
+  },
+};
+
+const baseMsgRequestDataResponse: object = {};
+
+export const MsgRequestDataResponse = {
+  encode(_: MsgRequestDataResponse, writer: Writer = Writer.create()): Writer {
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgRequestDataResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgRequestDataResponse } as MsgRequestDataResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgRequestDataResponse {
+    const message = { ...baseMsgRequestDataResponse } as MsgRequestDataResponse;
+    return message;
+  },
+
+  toJSON(_: MsgRequestDataResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  fromPartial(_: DeepPartial<MsgRequestDataResponse>): MsgRequestDataResponse {
+    const message = { ...baseMsgRequestDataResponse } as MsgRequestDataResponse;
+    return message;
+  },
+};
 
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
-  BuyGold(request: MsgBuyGold): Promise<MsgBuyGoldResponse>
-  SellGold(request: MsgSellGold): Promise<MsgSellGoldResponse>
+  BuyGold(request: MsgBuyGold): Promise<MsgBuyGoldResponse>;
+  SellGold(request: MsgSellGold): Promise<MsgSellGoldResponse>;
+  RequestData(request: MsgRequestData): Promise<MsgRequestDataResponse>;
 }
 
 export class MsgClientImpl implements Msg {
-  private readonly rpc: Rpc
+  private readonly rpc: Rpc;
   constructor(rpc: Rpc) {
-    this.rpc = rpc
+    this.rpc = rpc;
   }
   BuyGold(request: MsgBuyGold): Promise<MsgBuyGoldResponse> {
-    const data = MsgBuyGold.encode(request).finish()
-    const promise = this.rpc.request('satawatnack.goldchain.goldchain.Msg', 'BuyGold', data)
-    return promise.then((data) => MsgBuyGoldResponse.decode(new Reader(data)))
+    const data = MsgBuyGold.encode(request).finish();
+    const promise = this.rpc.request(
+      "satawatnack.goldchain.goldchain.Msg",
+      "BuyGold",
+      data
+    );
+    return promise.then((data) => MsgBuyGoldResponse.decode(new Reader(data)));
   }
 
   SellGold(request: MsgSellGold): Promise<MsgSellGoldResponse> {
-    const data = MsgSellGold.encode(request).finish()
-    const promise = this.rpc.request('satawatnack.goldchain.goldchain.Msg', 'SellGold', data)
-    return promise.then((data) => MsgSellGoldResponse.decode(new Reader(data)))
+    const data = MsgSellGold.encode(request).finish();
+    const promise = this.rpc.request(
+      "satawatnack.goldchain.goldchain.Msg",
+      "SellGold",
+      data
+    );
+    return promise.then((data) => MsgSellGoldResponse.decode(new Reader(data)));
+  }
+
+  RequestData(request: MsgRequestData): Promise<MsgRequestDataResponse> {
+    const data = MsgRequestData.encode(request).finish();
+    const promise = this.rpc.request(
+      "satawatnack.goldchain.goldchain.Msg",
+      "RequestData",
+      data
+    );
+    return promise.then((data) =>
+      MsgRequestDataResponse.decode(new Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
-declare var self: any | undefined
-declare var window: any | undefined
+declare var self: any | undefined;
+declare var window: any | undefined;
 var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
-})()
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
+  throw "Unable to locate global object";
+})();
 
-type Builtin = Date | Function | Uint8Array | string | number | undefined
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
+}
+
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  for (let i = 0; i < arr.byteLength; ++i) {
+    bin.push(String.fromCharCode(arr[i]));
+  }
+  return btoa(bin.join(""));
+}
+
+type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -287,16 +622,16 @@ export type DeepPartial<T> = T extends Builtin
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+  : Partial<T>;
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
-  return long.toNumber()
+  return long.toNumber();
 }
 
 if (util.Long !== Long) {
-  util.Long = Long as any
-  configure()
+  util.Long = Long as any;
+  configure();
 }

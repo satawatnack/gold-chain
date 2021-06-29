@@ -8,7 +8,9 @@ import (
 
 // x/goldchain module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
-	// this line is used by starport scaffolding # ibc/errors
-	ErrInvalidN = sdkerrors.Register(ModuleName, 1, "Invalid n")
+	ErrInvalidBasicMsg = sdkerrors.Register(ModuleName, 1, "InvalidBasicMsg")
+	ErrInvalidN        = sdkerrors.Register(ModuleName, 2, "Invalid n")
+	ErrItemNotFound    = sdkerrors.Register(ModuleName, 5, "ItemNotFound")
+	ErrSample          = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrInvalidVersion  = sdkerrors.Register(ModuleName, 8, "invalid ICS20 version")
 )

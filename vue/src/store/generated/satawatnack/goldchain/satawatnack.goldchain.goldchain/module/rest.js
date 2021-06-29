@@ -134,4 +134,20 @@ export class HttpClient {
  * @version version not set
  */
 export class Api extends HttpClient {
+    constructor() {
+        super(...arguments);
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryResult
+         * @request GET:/consuming/v1/result/{requestId}
+         */
+        this.queryResult = (requestId, params = {}) => this.request({
+            path: `/consuming/v1/result/${requestId}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+    }
 }

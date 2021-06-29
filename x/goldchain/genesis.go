@@ -10,6 +10,13 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	k.BindPort(ctx, types.PortKey)
+
+	en_time, err := ctx.BlockHeader().Time.MarshalBinary()
+	if err != nil {
+		panic(err)
+	}
+	k.SetLatestTimeRequest(ctx, en_time)
 
 	// this line is used by starport scaffolding # ibc/genesis/init
 }

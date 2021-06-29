@@ -1,15 +1,17 @@
 syntax = "proto3";
 package satawatnack.goldchain.goldchain;
 
-// this line is used by starport scaffolding # proto/tx/import
-
 option go_package = "github.com/satawatnack/goldchain/x/goldchain/types";
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 // Msg defines the Msg service.
 service Msg {
     // this line is used by starport scaffolding # proto/tx/rpc
     rpc BuyGold(MsgBuyGold) returns (MsgBuyGoldResponse);
     rpc SellGold(MsgSellGold) returns (MsgSellGoldResponse);
+    rpc RequestData(MsgRequestData) returns (MsgRequestDataResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
@@ -26,3 +28,32 @@ message MsgSellGold {
 }
 
 message MsgSellGoldResponse { }
+
+// MsgRequestData defines a SDK message for requesting data from BandChain.
+message MsgRequestData {
+    option (gogoproto.equal) = false;
+    option (gogoproto.goproto_getters) = false;
+  
+    int64 oracle_script_id = 1 [
+      (gogoproto.customname) = "OracleScriptID",
+      (gogoproto.moretags) = "yaml:\"oracle_script_id\""
+    ];
+    string source_channel = 2
+        [ (gogoproto.moretags) = "yaml:\"source_channel\"" ];
+    bytes calldata = 3;
+    uint64 ask_count = 4 [ (gogoproto.moretags) = "yaml:\"ask_count\"" ];
+    uint64 min_count = 5 [ (gogoproto.moretags) = "yaml:\"min_count\"" ];
+    repeated cosmos.base.v1beta1.Coin fee_limit = 6 [
+      (gogoproto.nullable) = false,
+      (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+    ];
+    string request_key = 7;
+    // PrepareGas is amount of gas to pay to prepare raw requests
+    uint64 prepare_gas = 8;
+    // ExecuteGas is amount of gas to reserve for executing
+    uint64 execute_gas = 9;
+    string sender = 10;
+  }
+
+  // MsgRequestDataResponse defines the Msg/RequestData response type.
+message MsgRequestDataResponse {}

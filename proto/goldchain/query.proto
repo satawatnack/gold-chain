@@ -1,15 +1,30 @@
 syntax = "proto3";
 package satawatnack.goldchain.goldchain;
 
-import "google/api/annotations.proto";
-import "cosmos/base/query/v1beta1/pagination.proto";
-// this line is used by starport scaffolding # 1
-
 option go_package = "github.com/satawatnack/goldchain/x/goldchain/types";
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
 
 // Query defines the gRPC querier service.
 service Query {
-    // this line is used by starport scaffolding # 2
+    rpc balances(QueryBalancesRequest) returns (QueryBalancesResponse);
+
+    rpc Result(QueryResultRequest) returns (QueryResultResponse) {
+        option (google.api.http).get = "/consuming/v1/result/{request_id}";
+    }
 }
 
-// this line is used by starport scaffolding # 3
+message QueryBalancesRequest {
+    string sender = 1;
+}
+
+message QueryBalancesResponse {
+    string balance = 1;
+}
+
+message QueryResultRequest { int64 request_id = 1; }
+
+message QueryResultResponse {
+  bytes result = 1;
+}

@@ -1,0 +1,22 @@
+  {
+    "src": {
+      "chain-id": "goldchain",
+      "client-id": "",
+      "connection-id": "",
+      "channel-id": "",
+      "port-id": "goldchain",
+      "version": "ics20-1",
+      "order": "unordered"
+    },
+    "dst": {
+      "chain-id": "band-laozi-testnet1",
+      "client-id": "",
+      "connection-id": "",
+      "channel-id": "",
+      "port-id": "oracle",
+      "version": "ics20-1",
+      "order": "unordered"
+    },
+    "strategy": { "type": "naive" }
+  }
+  

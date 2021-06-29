@@ -1,5 +1,11 @@
 package types
 
+import (
+	"encoding/binary"
+
+	oracletypes "github.com/bandprotocol/chain/v2/x/oracle/types"
+)
+
 const (
 	// ModuleName defines the module name
 	ModuleName = "goldchain"
@@ -16,11 +22,44 @@ const (
 	// MemStoreKey defines the in-memory store key
 	MemStoreKey = "mem_goldchain"
 
-	// this line is used by starport scaffolding # ibc/keys/name
+	// PortKey
+	PortKey = ModuleName
+
+	// Version
+	Version = "ics20-1"
 )
 
-// this line is used by starport scaffolding # ibc/keys/port
+var (
+	// ResultStoreKeyPrefix is a prefix for storing result
+	ResultStoreKeyPrefix = []byte{0xff}
+
+	GlobalStoreKeyPrefix = []byte{0x00}
+
+	// LatestRequestIDKey
+	LatestRequestIDKey = []byte{0x01}
+
+	LatestTimeRequestKey = []byte{0x02}
+
+	OrdersCountStoreKey = append(GlobalStoreKeyPrefix, []byte("OrdersCount")...)
+
+	OrderStoreKeyPrefix = []byte{0x03}
+)
 
 func KeyPrefix(p string) []byte {
 	return []byte(p)
+}
+
+// ResultStoreKey is a function to generate key for each result in store
+func ResultStoreKey(requestID oracletypes.RequestID) []byte {
+	return append(ResultStoreKeyPrefix, int64ToBytes(int64(requestID))...)
+}
+
+func OrderStoreKey(orderID int64) []byte {
+	return append(OrderStoreKeyPrefix, int64ToBytes(orderID)...)
+}
+
+func int64ToBytes(num int64) []byte {
+	result := make([]byte, 8)
+	binary.BigEndian.PutUint64(result, uint64(num))
+	return result
 }

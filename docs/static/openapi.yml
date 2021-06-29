@@ -19274,6 +19274,46 @@ paths:
           format: uint64
       tags:
         - Query
+  '/consuming/v1/result/{requestId}':
+    get:
+      operationId: SatawatnackGoldchainGoldchainResult
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              result:
+                type: string
+                format: byte
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: requestId
+          in: path
+          required: true
+          type: string
+          format: int64
+      tags:
+        - Query
 definitions:
   cosmos.bank.v1beta1.DenomUnit:
     type: object
@@ -29490,5 +29530,19 @@ definitions:
       the connection handshake.
   satawatnack.goldchain.goldchain.MsgBuyGoldResponse:
     type: object
+  satawatnack.goldchain.goldchain.MsgRequestDataResponse:
+    type: object
+    description: MsgRequestDataResponse defines the Msg/RequestData response type.
   satawatnack.goldchain.goldchain.MsgSellGoldResponse:
     type: object
+  satawatnack.goldchain.goldchain.QueryBalancesResponse:
+    type: object
+    properties:
+      balance:
+        type: string
+  satawatnack.goldchain.goldchain.QueryResultResponse:
+    type: object
+    properties:
+      result:
+        type: string
+        format: byte

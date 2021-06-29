@@ -10,3 +10,9 @@ message GenesisState {
     // this line is used by starport scaffolding # genesis/proto/state
     // this line is used by starport scaffolding # ibc/genesis/proto
 }
+
+message Order {
+    string Owner = 1;
+    int64 Amount = 2;
+    bool buy = 3;
+}

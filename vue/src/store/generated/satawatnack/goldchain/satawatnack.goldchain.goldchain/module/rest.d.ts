@@ -1,5 +1,16 @@
 export declare type GoldchainMsgBuyGoldResponse = object;
+/**
+ * MsgRequestDataResponse defines the Msg/RequestData response type.
+ */
+export declare type GoldchainMsgRequestDataResponse = object;
 export declare type GoldchainMsgSellGoldResponse = object;
+export interface GoldchainQueryBalancesResponse {
+    balance?: string;
+}
+export interface GoldchainQueryResultResponse {
+    /** @format byte */
+    result?: string;
+}
 export interface ProtobufAny {
     typeUrl?: string;
     /** @format byte */
@@ -10,6 +21,16 @@ export interface RpcStatus {
     code?: number;
     message?: string;
     details?: ProtobufAny[];
+}
+/**
+* Coin defines a token with a denomination and an amount.
+
+NOTE: The amount field is an Int which implements the custom method
+signatures required by gogoproto.
+*/
+export interface V1Beta1Coin {
+    denom?: string;
+    amount?: string;
 }
 export declare type QueryParamsType = Record<string | number, any>;
 export declare type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
@@ -69,5 +90,13 @@ export declare class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryResult
+     * @request GET:/consuming/v1/result/{requestId}
+     */
+    queryResult: (requestId: string, params?: RequestParams) => Promise<HttpResponse<GoldchainQueryResultResponse, RpcStatus>>;
 }
 export {};

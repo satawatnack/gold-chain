@@ -12,6 +12,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
 	cdc.RegisterConcrete(&MsgBuyGold{}, "goldchain/BuyGold", nil)
 	cdc.RegisterConcrete(&MsgSellGold{}, "goldchain/SellGold", nil)
+	cdc.RegisterConcrete(&MsgRequestData{}, "goldchain/RequestData", nil)
 }
 
 func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
@@ -19,6 +20,7 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgBuyGold{},
 		&MsgSellGold{},
+		&MsgRequestData{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

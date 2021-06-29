@@ -3,11 +3,16 @@ accounts:
     coins: ["20000token", "200000000stake", "10000usdn", "5gold"]
   - name: user2
     coins: ["10000token", "10000usdn", "5gold"]
-  - name: gold-pool
-    coins: ["20000token", "200000000stake", "0usdn", "20000000gold"]
+  - name: faucet
+    coins: ["10000token", "1000000stake", "10000usdn", "5gold"]
 validator:
   name: user1
   staked: "100000000stake"
+faucet:
+  name: faucet
+  coins: ["20000000token", 100000000stake]
+  coins_max: ["20000000token", 100000000stake]
+  port: 4500
 client:
   vuex:
     path: "vue/src/store"
